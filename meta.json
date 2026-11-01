@@ -1,0 +1,12 @@
+{
+  "name": "Git push",
+  "summary": "Pushes the checked-out branch to a remote and verifies the remote moved.",
+  "author": "hummerstudio",
+  "license": "MIT",
+  "tags": [
+    "official-port",
+    "git",
+    "publish"
+  ],
+  "homepage": "https://github.com/hummerstudio/jenkins-atom-git-push"
+}

@@ -1,0 +1,82 @@
+{
+  "atomCode": "git-push",
+  "name": "Git push",
+  "version": "1.0.0",
+  "description": "Pushes the checked-out branch to a remote and verifies the remote moved.",
+  "execution": {
+    "packagePath": "git-push.jar",
+    "language": "java",
+    "target": "$atom_java_path -cp git-push.jar com.jenkinschina.atom.sdk.AtomRunner"
+  },
+  "input": {
+    "remote": {
+      "label": "远端（origin 或 URL）",
+      "type": "vuex-input",
+      "default": "origin"
+    },
+    "branch": {
+      "label": "本地分支（留空用当前分支）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "targetBranch": {
+      "label": "远端分支（留空同名）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "force": {
+      "label": "强制推送",
+      "type": "checkbox",
+      "default": "false"
+    },
+    "setUpstream": {
+      "label": "设置上游跟踪",
+      "type": "checkbox",
+      "default": "true"
+    },
+    "followTags": {
+      "label": "一并推送附注标签",
+      "type": "checkbox",
+      "default": "false"
+    },
+    "username": {
+      "label": "用户名（HTTPS 远端）",
+      "type": "vuex-input",
+      "default": ""
+    },
+    "token": {
+      "label": "密码 / 访问令牌",
+      "type": "password",
+      "default": ""
+    },
+    "timeoutSeconds": {
+      "label": "超时（秒）",
+      "type": "vuex-input",
+      "default": "180"
+    }
+  },
+  "output": {
+    "branch": {
+      "type": "string",
+      "description": "推送到的远端分支"
+    },
+    "sha": {
+      "type": "string",
+      "description": "推送后的提交"
+    },
+    "remote": {
+      "type": "string",
+      "description": "远端"
+    },
+    "forced": {
+      "type": "string",
+      "description": "是否强制推送"
+    }
+  },
+  "x-jenkins": {
+    "protocol": "jenkins-1",
+    "requires": {
+      "runner": ">=0.4.0"
+    }
+  }
+}
