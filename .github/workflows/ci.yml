@@ -37,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: git-push-atom
-          path: atom/dist/git-push/
+          path: atom/target/dist/git-push/
