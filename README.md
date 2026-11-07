@@ -13,7 +13,7 @@ git-push 插件是一堆勾选框套 `git push`。值得小心的是凭据：tok
 - 推成功但 `ls-remote` 对不上 → `THIRD_PART`，直接报两边的 SHA
 
 ```bash
-./build.sh && ./tools/smoke.sh
+mvn verify          # -> dist/git-push/, 加上 src/test/java/atom/GitPushIT.java
 ```
 
-smoke 用**真的裸仓库**当远端：验成功推送、非快进被拒、force 覆盖、换目标分支、SHA 回读。
+测试用**真的裸仓库**当远端：验成功推送、非快进被拒、force 覆盖、换目标分支、SHA 回读。
