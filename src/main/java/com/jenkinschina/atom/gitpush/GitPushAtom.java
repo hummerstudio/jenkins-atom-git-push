@@ -6,9 +6,12 @@ import com.jenkinschina.atom.sdk.AtomTask;
 import com.jenkinschina.atom.sdk.ErrorType;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,7 +63,7 @@ public class GitPushAtom implements AtomTask {
             if (!token.isBlank() && !username.isEmpty() && remote.startsWith("http")) {
                 // username in the URL is harmless; the secret never is
                 pushUrl = remote.replaceFirst("^(https?://)", "$1" + username + "@");
-                askpass = Files.createTempFile("atom-git-", ".askpass");
+                askpass = createOwnerOnlyTempFile("atom-git-", ".askpass");
                 Files.writeString(askpass,
                         "#!/bin/sh\ncase \"$1\" in\n  *sername*) echo \"" + username + "\" ;;\n"
                                 + "  *) echo \"" + token.replace("\"", "") + "\" ;;\nesac\n",
@@ -166,6 +169,19 @@ public class GitPushAtom implements AtomTask {
             }
         }
         return lines.isEmpty() ? "(no output)" : lines.get(lines.size() - 1).trim();
+    }
+
+    /**
+     * A temp file that is 0600 from the moment it exists: the askpass script carries the token, and tightening the
+     * mode afterwards leaves a window where it is readable by anyone on the box. A filesystem without POSIX modes has
+     * no group/world bit to lose, so the attribute is left off there.
+     */
+    private static Path createOwnerOnlyTempFile(String prefix, String suffix) throws IOException {
+        if (FileSystems.getDefault().supportedFileAttributeViews().contains("posix")) {
+            return Files.createTempFile(prefix, suffix,
+                    PosixFilePermissions.asFileAttribute(PosixFilePermissions.fromString("rw-------")));
+        }
+        return Files.createTempFile(prefix, suffix, new FileAttribute<?>[0]);
     }
 
     private static void setExecutable(Path file) {
