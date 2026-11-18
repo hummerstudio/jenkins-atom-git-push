@@ -197,7 +197,9 @@ class GitPushIT {
 
     private Path bareRemote(String name) throws Exception {
         Path remote = scratch.resolve(name);
-        git(scratch, "init", "-q", "--bare", remote.toString());
+        // the bare remote must point HEAD at main: cloning a bare repo whose HEAD names a branch that does not
+        // exist leaves the clone on an unborn default branch, and every later push of "main" fails there
+        git(scratch, "init", "-q", "--bare", "-b", "main", remote.toString());
         return remote;
     }
 
